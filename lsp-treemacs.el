@@ -919,6 +919,7 @@ With prefix 2 show both."
                              :range (&Range :start (start &as &Position :line :character))
                              :source?))
                (list :id message
+                     :key message
                      :label (format (propertize "%s %s %s" 'face 'default)
                                     (if source?
                                         (propertize (format "[%s]" source?)
@@ -947,6 +948,7 @@ With prefix 2 show both."
           (when (and (lsp-f-ancestor-of? folder file)
                      (lsp-treemacs-errors--diags? (lsp-diagnostics-stats-for file)))
             (list :id file
+                  :key file
                   :label (format "%s %s %s"
                                  (f-filename file)
                                  (->> (append (lsp-diagnostics-stats-for file) ())
@@ -1009,6 +1011,7 @@ With prefix 2 show both."
                     (propertize (f-dirname folder)
                                 'face 'lsp-lens-face))
             :id folder
+            :key folder
             :icon 'root
             :children (-partial #'lsp-treemacs-errors--list-files folder)
             :ret-action (lambda (&rest _)
