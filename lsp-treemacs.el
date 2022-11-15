@@ -1022,15 +1022,17 @@ With prefix 2 show both."
 
 (defun lsp-treemacs-errors-list--refresh ()
   (lsp-treemacs-render
-   (if (and lsp-treemacs-error-list-current-project-only
-            lsp-treemacs--current-workspaces)
-       (->> lsp-treemacs--current-workspaces
-            (-map #'lsp-workspace-folders)
-            (-flatten)
-            (-keep #'lsp-treemacs--build-error-list))
-     (->> (lsp-session)
-          (lsp-session-folders)
-          (-keep #'lsp-treemacs--build-error-list)))
+   (->>
+    (if (and lsp-treemacs-error-list-current-project-only
+             lsp-treemacs--current-workspaces)
+        (->> lsp-treemacs--current-workspaces
+             (-map #'lsp-workspace-folders)
+             (-flatten))
+      (->> (lsp-session)
+           (lsp-session-folders)))
+    (-map 'downcase)
+    (-distinct)
+    (-keep #'lsp-treemacs--build-error-list))
    "Errors List"
    nil
    lsp-treemacs-errors-buffer-name
