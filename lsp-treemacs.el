@@ -1036,7 +1036,12 @@ With prefix 2 show both."
    "Errors List"
    nil
    lsp-treemacs-errors-buffer-name
-   `(["Cycle Severity" lsp-treemacs-cycle-severity])))
+   `(["Cycle Severity" lsp-treemacs-cycle-severity]))
+
+  ;; seems that caching breaks here, but unclear why...
+  ;; perhaps tree keys should include the LSP version key?
+  (lsp-treemacs-generic-refresh)
+  )
 
 ;;;###autoload
 (defun lsp-treemacs-errors-list ()
