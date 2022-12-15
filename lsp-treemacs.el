@@ -1021,27 +1021,28 @@ With prefix 2 show both."
 (defvar lsp-treemacs--current-workspaces nil)
 
 (defun lsp-treemacs-errors-list--refresh ()
-  (lsp-treemacs-render
-   (->>
-    (if (and lsp-treemacs-error-list-current-project-only
-             lsp-treemacs--current-workspaces)
-        (->> lsp-treemacs--current-workspaces
-             (-map #'lsp-workspace-folders)
-             (-flatten))
-      (->> (lsp-session)
-           (lsp-session-folders)))
-    (-map 'downcase)
-    (-distinct)
-    (-keep #'lsp-treemacs--build-error-list))
-   "Errors List"
-   nil
-   lsp-treemacs-errors-buffer-name
-   `(["Cycle Severity" lsp-treemacs-cycle-severity]))
+  (prog1
+      (lsp-treemacs-render
+       (->>
+        (if (and lsp-treemacs-error-list-current-project-only
+                 lsp-treemacs--current-workspaces)
+            (->> lsp-treemacs--current-workspaces
+                 (-map #'lsp-workspace-folders)
+                 (-flatten))
+          (->> (lsp-session)
+               (lsp-session-folders)))
+        (-map 'downcase)
+        (-distinct)
+        (-keep #'lsp-treemacs--build-error-list))
+       "Errors List"
+       nil
+       lsp-treemacs-errors-buffer-name
+       `(["Cycle Severity" lsp-treemacs-cycle-severity]))
 
-  ;; seems that caching breaks here, but unclear why...
-  ;; perhaps tree keys should include the LSP version key?
-  (lsp-treemacs-generic-refresh)
-  )
+    ;; seems that caching breaks here, but unclear why...
+    ;; perhaps tree keys should include the LSP version key?
+    (lsp-treemacs-generic-refresh)
+    ))
 
 ;;;###autoload
 (defun lsp-treemacs-errors-list ()
